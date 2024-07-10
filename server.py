@@ -74,6 +74,8 @@ def post_brushing_result():
 
 	## change brushedIndex to list
 	brushedIndexList = brushedIndex.split(",")
+	if brushedIndexList[0] == "":
+		brushedIndexList = []
 	brushedIndexList = [int(i) for i in brushedIndexList]
 	completionTime = float(completionTime)
 
@@ -91,10 +93,40 @@ def post_brushing_result():
 
 	return "Success"
 
+
+
+@app.route('/postsurveyresult', methods=["POST"])
+def post_survey_result():
+	args = request.args
+	age = args.get('age')
+	gender = args.get('gender')
+	education = args.get('education')
+	major = args.get('major')
+	famil_vis = args.get('familVis')
+	famil_scatter = args.get('familScatter')
+	participant_num = args.get('participant')
+
+	result = {
+		"age": age,
+		"gender": gender, 
+		"education": education,
+		"major": major,
+		"familVis": famil_vis,
+		"familScatter": famil_scatter,
+	}
+
+	with open(f"./data/exp1/survey/{participant_num}.json", 'w') as f:
+		json.dump(result, f)
+
+
+	return "Success"
+
+
+
 if __name__ == '__main__':
 
 	EXP1_TASK_INFOS = json.load(open('./data/exp1/trial_infos_exp1.json', 'r'))
 
-	app.run(debug=True)
+	app.run(debug=True, port=5100)
 
 
