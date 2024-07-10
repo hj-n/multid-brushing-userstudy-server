@@ -118,7 +118,6 @@ def post_survey_result():
 	with open(f"./data/exp1/survey/{participant_num}.json", 'w') as f:
 		json.dump(result, f)
 
-
 	return "Success"
 
 
