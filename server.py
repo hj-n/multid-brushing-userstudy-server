@@ -59,9 +59,42 @@ def get_preprocessed_data():
 			results = json.load(f)
 	return jsonify(results)
 
+@app.route('/postbrushingresult', methods=["POST"])
+def post_brushing_result():
+	args = request.args
+	brushedIndex = args.get('brushedIndex')
+	completionTime = args.get('completionTime')
+	
+	identifier = args.get('identifier')
+	participant_num = args.get('participant')
+	trial_num = args.get('trial')
+	exp_num = int(args.get('exp'))
+
+	print(exp_num, participant_num, trial_num, identifier)
+
+	## change brushedIndex to list
+	brushedIndexList = brushedIndex.split(",")
+	brushedIndexList = [int(i) for i in brushedIndexList]
+	completionTime = float(completionTime)
+
+	result = {
+		"brushedIndex": brushedIndexList,
+		"completionTime": completionTime,
+		"identifier": identifier,
+	}
+
+	## save the result
+	if exp_num == 1:
+		with open(f"./data/exp1/results/{participant_num}_{trial_num}.json", 'w') as f:
+			json.dump(result, f)
+
+
+	return "Success"
+
 if __name__ == '__main__':
 
 	EXP1_TASK_INFOS = json.load(open('./data/exp1/trial_infos_exp1.json', 'r'))
 
 	app.run(debug=True)
+
 
