@@ -15,6 +15,7 @@ CONSTANTS
 """
 
 EXP1_TRIAL_INFOS = None
+EXP2_TRIAL_INFOS = None
 
 """
 Models for the database
@@ -43,8 +44,9 @@ def get_trial_info():
 
 	if exp_num == 1:
 		results = EXP1_TASK_INFOS["P" + participant_num][trial_num]
-	else:
-		pass
+	elif exp_num == 2:
+		results = EXP2_TASK_INFOS["P" + participant_num][trial_num]
+	
 
 	return jsonify(results)
 
@@ -56,6 +58,9 @@ def get_preprocessed_data():
 
 	if exp_num == 1:
 		with open(f"./data/exp1/preprocessed/{identifier}.json", 'r') as f:
+			results = json.load(f)
+	elif exp_num == 2:
+		with open(f"./data/exp2/preprocessed/{identifier}.json", 'r') as f:
 			results = json.load(f)
 	return jsonify(results)
 
@@ -89,6 +94,10 @@ def post_brushing_result():
 	if exp_num == 1:
 		with open(f"./data/exp1/results/{participant_num}_{trial_num}.json", 'w') as f:
 			json.dump(result, f)
+	
+	elif exp_num == 2:
+		with open(f"./data/exp2/results/{participant_num}_{trial_num}.json", 'w') as f:
+			json.dump(result, f)
 
 
 	return "Success"
@@ -117,7 +126,7 @@ def post_survey_result():
 
 	with open(f"./data/exp1/survey/{participant_num}.json", 'w') as f:
 		json.dump(result, f)
-
+	
 	return "Success"
 
 
@@ -125,6 +134,7 @@ def post_survey_result():
 if __name__ == '__main__':
 
 	EXP1_TASK_INFOS = json.load(open('./data/exp1/trial_infos_exp1.json', 'r'))
+	EXP2_TASK_INFOS = json.load(open('./data/exp2/trial_infos_exp2.json', 'r'))
 
 	app.run(debug=True, port=5100)
 
